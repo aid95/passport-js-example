@@ -21,8 +21,39 @@ app.use(session({
   saveUninitialized: true,
   store: new FileStore()
 }));
+
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
+var exampleAuth = {
+  email: 'webmaster@mail.gomi.land',
+  username: 'imgomi',
+  password: 'passw0rd!',
+};
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
+    passwordField: 'pwd',
+  },
+  function (username, password, done) {
+    if (username !== exampleAuth.email) {
+      return done(null, false, {
+        message: 'Incorrect username.'
+      });
+    } else if (password !== exampleAuth.password) {
+      return done(null, false, {
+        message: 'Incorrect password.'
+      });
+    } else {
+      return done(null, exampleAuth);
+    }
+  }
+));
+app.post('/auth/login_process',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/auth/login'
+  })
+);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
