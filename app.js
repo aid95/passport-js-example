@@ -22,13 +22,27 @@ app.use(session({
   store: new FileStore()
 }));
 
-var passport = require('passport')
-var LocalStrategy = require('passport-local').Strategy;
 var exampleAuth = {
   email: 'webmaster@mail.gomi.land',
   username: 'imgomi',
   password: 'passw0rd!',
 };
+
+var passport = require('passport')
+var LocalStrategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+passport.serializeUser(function (user, done) {
+  done(null, user.email);
+});
+passport.deserializeUser(function (id, done) {
+  if (id === exampleAuth.email) {
+    done(null, exampleAuth);
+  }
+});
+
 passport.use(new LocalStrategy(
   {
     usernameField: 'email',
