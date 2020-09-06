@@ -13,4 +13,17 @@ router.get('/logout', function(req, res, next) {
   req.logout();
 })
 
+router.get('/flash', function (req, res, next) {
+  req.flash('info', 'Flash is back!');
+  res.redirect('/');
+});
+
+router.get('/flash-disp', function (req, res, next) {
+  res.status(200).json({
+    'flash': {
+      'message': req.flash('info')
+    }
+  });
+});
+
 module.exports = router;

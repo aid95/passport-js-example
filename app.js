@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var FileStore = require('session-file-store')(session);
+var flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,6 +22,7 @@ app.use(session({
   saveUninitialized: true,
   store: new FileStore()
 }));
+app.use(flash());
 
 var exampleAuth = {
   email: 'webmaster@mail.gomi.land',
